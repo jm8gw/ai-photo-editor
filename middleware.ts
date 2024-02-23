@@ -3,6 +3,7 @@ import { authMiddleware } from "@clerk/nextjs";
 export default authMiddleware({   
   // Routes that can be accessed while signed out
   // publicRoutes: ['/'],
+  publicRoutes: ['/api/webhooks/clerk'], // We are allowing public access to the Clerk webhooks, so Clerk can send us events
 });
  
 export const config = {
