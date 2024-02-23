@@ -35,7 +35,7 @@ const UserSchema = new Schema({
         required: true,
         unique: true, // This is a unique identifier for the user
     },
-    photo: {
+    photo: { // This is the profile picture of the user btw, provided from a Clerk URL
         type: String, 
         required: true
     },
