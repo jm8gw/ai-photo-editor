@@ -87,3 +87,21 @@ export async function deleteUser(clerkId: string) {
   }
 }
 
+// USE CREDITS
+export async function updateCredits(userId: string, creditFee: number) {
+  try {
+    await connectToDatabase(); // As always, connect to the database
+
+    const updateUserCredits = await User.findOneAndUpdate( // Find the user by their _id, and update their credit balance by the credit fee
+        { _id: userId },
+        { $inc: { creditBalance: creditFee } }, // $inc is a Mongoose function that increments the credit balance by the credit fee
+        { new: true } // So we get the updated user back
+    )
+
+    if (!updateUserCredits) throw new Error("User credits update failed");
+
+    return JSON.parse(JSON.stringify(updateUserCredits)); // Return the updated user
+  } catch (error) {
+    handleError(error);
+  }
+}

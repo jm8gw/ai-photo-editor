@@ -37,12 +37,17 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { aspectRatioOptions, defaultValues, transformationTypes } from "@/constants";
+import { aspectRatioOptions, creditFee, defaultValues, transformationTypes } from "@/constants";
 import { CustomField } from "./CustomField";
-import { useState, useTransition } from "react";
+import { use, useEffect, useState, useTransition } from "react";
 import { AspectRatioKey, debounce, deepMergeObjects } from "@/lib/utils";
-import { Preahvihear } from "next/font/google";
 import MediaUploader from "./MediaUploader";
+import TransformedImage from "./TransformedImage";
+import { updateCredits } from "@/lib/actions/user.actions";
+import { getCldImageUrl } from "next-cloudinary";
+import { addImage, updateImage } from "@/lib/actions/image.actions";
+import { useRouter } from "next/navigation";
+import { InsufficientCreditsModal } from "./InsufficientCreditsModal";
 
 // Validation, where we define what kind of fields or inputs we want to have in our form
 export const formSchema = z.object({
@@ -70,11 +75,14 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
     // Need to know if we are currently doing something with that image
     const [isTransforming, setIsTransforming] = useState(false);
     // Need to know current transformation configuration
-    const [transformationConfig, setTransformationConfig] = useState(null);
+    const [transformationConfig, setTransformationConfig] = useState(config);
 
     // Use a useTransition hook for the onTransformHandler function
     // It allows us to update the state without blocking the UI
     const [isPending, startTransition] = useTransition()
+
+    // Routing functionality from next/navigation
+    const router = useRouter();
 
     // Need to define default values. In the case of editing, we might have data from before that we should use.
     const initialValues = data && action === 'Update' ? {
@@ -93,11 +101,76 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
     // Using defaultValues from the constants file, we can set the default values for the form fields. If we already have data, we can populate that instead!
     
     // 2. Define a submit handler.
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        console.log(values)
-    } // This was from shadcn's example
+    async function onSubmit(values: z.infer<typeof formSchema>) {
+        setIsSubmitting(true); // We are currently submitting
+
+        if(data || image) { // If we have data or a new image, proceed with the action
+            // Get back the tranformation url provided by cloudinary
+            const transformationUrl = getCldImageUrl({
+                width: image?.width,
+                height: image?.height,
+                src: image?.publicId,
+                ...transformationConfig
+            })
+
+            const imageData = {
+                title: values.title, // directly from the form
+                publicId: image?.publicId, // from the image state
+                transformationType: type, // recolor, gen fill, etc.
+                width: image?.width,
+                height: image?.height,
+                config: transformationConfig,
+                secureURL: image?.secureURL, // to where that image is stored
+                transformationURL: transformationUrl, // Change everything to have captital "URL". Too confusing otherwise.
+                aspectRatio: values.aspectRatio, // from the form
+                prompt: values.prompt,
+                color: values.color,
+            }
+
+            if(action === "Add"){ // We want to add the image for the first time
+                try {
+                    const newImage = await addImage({ // from image.actions.ts, accepts image, userId, and path
+                        image: imageData,
+                        userId,
+                        path: '/'
+                    })
+
+                    if(newImage) {
+                        form.reset(); // Reset the form (clean up)
+                        setImage(data);
+
+                        // Enable routing functionalities
+                        router.push(`/transformations/${newImage._id}`) // Push to that specific url
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
+            }
+
+            if(action === "Update"){ // We want to update the image
+                try {
+                    const updatedImage = await updateImage({ // from image.actions.ts, accepts image, userId, and path
+                        image: { 
+                            ...imageData, // spread what the image currently has
+                            _id: data._id, // pass the id of the image we are updating
+                        },
+                        userId,
+                        path: `/transformations/${data._id}` // We want to redirect to the specific image we are updating
+                    })
+
+                    if(updatedImage) {
+                        // Push to that existing tranformation
+                        router.push(`/transformations/${updatedImage._id}`)
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
+            }
+        }
+
+        setIsSubmitting(false); // We are done submitting
+        // console.log(values)
+    }
 
     // Function to handle our select (aspect ratio) field
     const onSelectFieldHandler = (value: string, onChangeField: (value:string) => void) => {
@@ -138,7 +211,7 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
         }
     
     // The actual function that handles the logic of doing something to the image
-    // TODO: Return to updateCredits
+    // TODO: Update creditFee to something else if needed
     const onTransformHandler = async () => {
         setIsTransforming(true); // We are currently transforming
 
@@ -149,15 +222,26 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
         setNewTransformation(null); // We are done with the transformation
 
         startTransition(async () => {
-            // await updateCredits(userId, creditFee);
+            await updateCredits(userId, creditFee); // Coming from user actions, as this is a server action done with the database. We need to update the user's credit balance after they have used some of it to transform an image.
+            // creditFee is a constant from the constants file (-1). 
         })
     }
+
+    // In the case of using image restore or remove background, we need to set the new transformation to the config immediately after the image is uploaded using useEffect, as we won't be using fields (like aspect ratio) that would normally set the transformation upon selection. This way, the button won't stay disabled after the image is uploaded for those two options :).
+    useEffect(() => {
+        if(image && (type === 'restore' || type === 'removeBackground')){
+            setNewTransformation(transformationType.config);
+        }
+    }, [image, transformationType.config, type])
 
 
     // 3. Render the form.
   return (
     <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            {/* Check credit balance before doing anything else. If it is lower than what we are charging, bring up the alert modal. */}
+            {creditBalance < Math.abs(creditFee) && <InsufficientCreditsModal /> }
+
             {/* All options will have a title and a publicId */}
             <CustomField 
                 control={form.control}
@@ -177,7 +261,7 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
                     className="w-full"
                     render={({ field }) => (
                     <Select
-                        onValueChange={(value) => onSelectFieldHandler(value, field.onChange)}
+                        onValueChange={(value: string) => onSelectFieldHandler(value, field.onChange)}
                     >
                         <SelectTrigger className="select-field">
                           <SelectValue placeholder="Select Size" />
@@ -187,6 +271,7 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
                             {Object.keys(aspectRatioOptions).map((key) => (
                                 <SelectItem key={key} value={key} className="select-item">
                                     {aspectRatioOptions[key as AspectRatioKey].label}
+                                    {/* Get the image size from the aspect ratio options */}
                                 </SelectItem>
                             ))}
                         </SelectContent>
@@ -260,6 +345,16 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
                         />
                     )}
                 />
+
+                <TransformedImage 
+                    image={image}
+                    type={type}
+                    title={form.getValues().title}
+                    isTransforming={isTransforming}
+                    setIsTransforming={setIsTransforming}
+                    transformationConfig={transformationConfig}
+                />
+
             </div>
 
             <div className="flex flex-col gap-4">

@@ -3,7 +3,7 @@
 // In here, we are going to use shadcn's toast component. A Toast is a "succinct message that is displayed temprarily".
 // To allow for image uploads, we are going to use the CldUploadWidget from the next-cloudinary package.
 
-import { CldImage, CldOgImage, CldUploadWidget } from "next-cloudinary"
+import { CldImage, CldOgImage, CldUploadWidget } from "next-cloudinary" // Very important components from the next-cloudinary package. They allow for image uploads and image rendering.
 import { useToast } from "../ui/use-toast"
 import Image from "next/image";
 import { dataUrl, getImageSize } from "@/lib/utils";
@@ -29,13 +29,13 @@ const MediaUploader = ({
     const { toast } = useToast()
 
     const onUploadSuccessHandler = (result: any) => {
-        {/* Set the image state to the result of the upload */}
+        {/* Set the image state to the result of the upload. We will utilize this data later within our form. */}
         setImage((prevState: any) => ({
             ...prevState,
             publicId: result?.info?.public_id,
             width: result?.info?.width,
             height: result?.info?.height,
-            secureUrl: result?.info?.secure_url,
+            secureURL: result?.info?.secure_url,
         }))
 
 
@@ -76,7 +76,7 @@ const MediaUploader = ({
                     Original
                 </h3>
 
-                {/* Must check for a publicId to display the image */}
+                {/* Must check for a publicId to display the image. publicId does not exist until a image is uploaded. */}
                 {publicId ? (
                     <>
                         <div className="cursor-pointer overflow-hidden rounded-[10px]">
@@ -92,6 +92,7 @@ const MediaUploader = ({
                         </div>
                     </>  
                 ): (
+                    /* This is what we should show if there hasn't yet been an image uploaded (aka no publicId) */
                     <div className="media-uploader_cta" 
                         onClick={() => open()}>
                         <div className="media-uploader_cta-image">
@@ -103,7 +104,7 @@ const MediaUploader = ({
                             />
                         </div>
                         <p className="p-14-medium">
-                            Click here to upload image
+                            Click Here to Upload Image
                         </p>
                     </div>
                 )}
