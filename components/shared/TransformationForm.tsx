@@ -42,6 +42,7 @@ import { CustomField } from "./CustomField";
 import { useState, useTransition } from "react";
 import { AspectRatioKey, debounce, deepMergeObjects } from "@/lib/utils";
 import { Preahvihear } from "next/font/google";
+import MediaUploader from "./MediaUploader";
 
 // Validation, where we define what kind of fields or inputs we want to have in our form
 export const formSchema = z.object({
@@ -201,7 +202,7 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
                         control={form.control}
                         name="prompt"
                         formLabel={
-                            type === 'remove' ? "Object to Remove" : "Object to recolor"
+                            type === 'remove' ? "Object to Remove" : "Object to Recolor"
                         }
                         className="w-full"
                         render={(({ field }) => (
@@ -243,6 +244,24 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
                 </div>
             )}
   
+            <div className="media-uploader-field">
+                {/* Mask Cloudinary's uploader widget within a custom field so we immediatly get it's data within our form */}
+                <CustomField 
+                    control={form.control}
+                    name="publicId"
+                    className="flex size-full flex-col"
+                    render={({ field }) => (
+                        <MediaUploader 
+                            onValueChange={field.onChange}
+                            setImage={setImage}
+                            publicId={field.value}
+                            image={image}
+                            type={type}
+                        />
+                    )}
+                />
+            </div>
+
             <div className="flex flex-col gap-4">
                 {/* A button to apply the desired transformation */}
                 <Button 

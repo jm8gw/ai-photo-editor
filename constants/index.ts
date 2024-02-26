@@ -42,11 +42,13 @@ export const navLinks = [
       route: "/credits",
       icon: "/assets/icons/bag.svg",
     },
+    /*
         {
         label: "A lil goofy guy",
         route: "/transformations/add/sillywilly",
         icon: "/assets/icons/stars.svg",
         },
+    */
   ];
   
   export const plans = [
