@@ -112,15 +112,16 @@ export const getImageSize = (
 };
 
 // DOWNLOAD IMAGE
+// This function can be written using chatgpt, it's pretty common
 export const download = (url: string, filename: string) => {
   if (!url) {
     throw new Error("Resource URL not provided! You need to provide one");
   }
 
   fetch(url)
-    .then((response) => response.blob())
+    .then((response) => response.blob()) // blob is a file-like object of raw data, it basically contains the image
     .then((blob) => {
-      const blobURL = URL.createObjectURL(blob);
+      const blobURL = URL.createObjectURL(blob); // Form the blob into a URL
       const a = document.createElement("a");
       a.href = blobURL;
 

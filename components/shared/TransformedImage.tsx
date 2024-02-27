@@ -1,12 +1,23 @@
-import { dataUrl, debounce, getImageSize } from '@/lib/utils'
-import { CldImage } from 'next-cloudinary'
+"use client"; // This is because the download button has an onClick listener. Whenever you have an onClick listener/handler, the component must be client-side.
+
+import { dataUrl, debounce, download, getImageSize } from '@/lib/utils'
+import { CldImage, getCldImageUrl } from 'next-cloudinary'
 import { PlaceholderValue } from 'next/dist/shared/lib/get-img-props'
 import Image from 'next/image'
 import React from 'react'
 
 const TransformedImage = ({ image, type, title, transformationConfig, isTransforming, setIsTransforming, hasDownload = false }: TransformedImageProps) => { // Again, type is defined in the types folder (index.d.ts)
 
-    const downloadHandler = () => {}
+    const downloadHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        e.preventDefault(); // Prevent default behavior of the browser, which is to reload the page
+
+        download(getCldImageUrl({ // This comes from utils.ts. It is a helper function that downloads the image.
+            width: image?.width,
+            height: image?.height,
+            src: image?.publicId,
+            ...transformationConfig
+        }), title); 
+    }
 
   return (
     <div className='flex flex-col gap-4'>
@@ -34,7 +45,7 @@ const TransformedImage = ({ image, type, title, transformationConfig, isTransfor
         
         {/* If we have the image (we uploaded an image and clicked apply), render the transformed image. Otherwise, render the placeholder. */}
         {image?.publicId && transformationConfig ? (
-            <div className='relative'>
+            <div /* className='relative' */>
                 <CldImage 
                     width={getImageSize(type, image, "width")} // getImageSize is a helper function in utils.ts. It takes the aspect ratio, and returns the dimensions based off of that aspect ratio.
                     height={getImageSize(type, image, "height")}
