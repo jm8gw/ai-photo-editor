@@ -56,7 +56,6 @@ const MediaUploader = ({
             description: `Please try again.`,
             className: 'error-toast',
             duration: 5000,
-            isClosable: true,
         })
     }
 
