@@ -1,4 +1,4 @@
-// Template provided by example project, which is a modified version of shdcn's modal example.
+// Template provided by example project, which is a modified version of shadcn's modal example.
 
 "use client";
 

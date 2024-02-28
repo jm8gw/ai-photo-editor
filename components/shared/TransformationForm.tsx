@@ -204,10 +204,9 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
                         [fieldName === 'prompt' ? 'prompt' : 'to' ]: value // Either we are changing the prompt or the color
                     }    
                 }))
+            }, 1000)(); // Must be made a self-involking function to work properly 
 
-                return onChangeField(value);
-            }, 1000) 
-
+            return onChangeField(value);
         }
     
     // The actual function that handles the logic of doing something to the image
@@ -262,6 +261,7 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
                     render={({ field }) => (
                     <Select
                         onValueChange={(value: string) => onSelectFieldHandler(value, field.onChange)}
+                        value={field.value} // So we know when the value has actually changed
                     >
                         <SelectTrigger className="select-field">
                           <SelectValue placeholder="Select Size" />
@@ -290,7 +290,7 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
                             type === 'remove' ? "Object to Remove" : "Object to Recolor"
                         }
                         className="w-full"
-                        render={(({ field }) => (
+                        render={({ field }) => (
                             <Input 
                                 value= {field.value}
                                 className="input-field" 
@@ -301,7 +301,7 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
                                     field.onChange
                                 )}
                             />
-                        ))}
+                        )}
                     />
                     
                     {/* Only object recolor will need a replacement color field */}

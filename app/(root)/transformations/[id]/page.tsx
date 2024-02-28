@@ -17,6 +17,7 @@ import TransformedImage from "@/components/shared/TransformedImage";
 import { Button } from "@/components/ui/button";
 import { getImageById } from "@/lib/actions/image.actions";
 import { getImageSize } from "@/lib/utils";
+import { DeleteConfirmation } from "@/components/shared/DeleteConfirmation";
 // import { DeleteConfirmation } from "@/components/shared/DeleteConfirmation";
 
 const ImageDetails = async ({ params: { id } }: SearchParamProps) => {
@@ -93,7 +94,7 @@ const ImageDetails = async ({ params: { id } }: SearchParamProps) => {
           />
         </div>
 
-        {userId === image.author.clerkId && (
+        {userId === image.author.clerkId && ( // If the user is the author of the image, they can update or delete it.
           <div className="mt-4 space-y-4">
             <Button asChild type="button" className="submit-button capitalize">
               <Link href={`/transformations/${image._id}/update`}>
@@ -101,7 +102,7 @@ const ImageDetails = async ({ params: { id } }: SearchParamProps) => {
               </Link>
             </Button>
 
-            {/*<DeleteConfirmation imageId={image._id} />*/}
+            <DeleteConfirmation imageId={image._id} />
           </div>
         )}
       </section>

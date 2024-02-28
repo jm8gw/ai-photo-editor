@@ -45,7 +45,7 @@ const TransformedImage = ({ image, type, title, transformationConfig, isTransfor
         
         {/* If we have the image (we uploaded an image and clicked apply), render the transformed image. Otherwise, render the placeholder. */}
         {image?.publicId && transformationConfig ? (
-            <div /* className='relative' */>
+            <div className="lg:relative">
                 <CldImage 
                     width={getImageSize(type, image, "width")} // getImageSize is a helper function in utils.ts. It takes the aspect ratio, and returns the dimensions based off of that aspect ratio.
                     height={getImageSize(type, image, "height")}
@@ -60,7 +60,8 @@ const TransformedImage = ({ image, type, title, transformationConfig, isTransfor
                     onError={() => {
                         debounce(() => {
                             setIsTransforming && setIsTransforming(false);
-                        }, 8000) // If nothing happens after 8 seconds, we can surely say that it has failed.
+                        }, 8000)() // If nothing happens after 8 seconds, we can surely say that it has failed.
+                        // This function won't be called on it's own unless we invoke it by making it a "self-invoking" expression. This is done by adding the () at the end of the function.
                     }}
                     /* VERY IMPORTANT: Spread the entire tranformation config. It will contain all of the image transformations that we want to apply for an image. */
                     {...transformationConfig}
@@ -71,7 +72,7 @@ const TransformedImage = ({ image, type, title, transformationConfig, isTransfor
                     <div className='transforming-loader'>
                         <Image 
                             src='/assets/icons/spinner.svg'
-                            alt='Transforming...'
+                            alt='Spinner'
                             width={50}
                             height={50}
                         />
