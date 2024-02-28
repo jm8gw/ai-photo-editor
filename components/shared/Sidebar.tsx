@@ -87,6 +87,8 @@ const Sidebar = () => {
                     </Button>
                 </SignedOut>
             </nav>
+            {/* Copyright information */}
+            <p className="text-xs text-gray-400 -mt-4 -mb-2">&copy; 2024 Jeffrey Mouritzen. All rights reserved.</p>
         </div>
     </aside>
   )
