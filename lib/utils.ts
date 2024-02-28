@@ -22,6 +22,10 @@ export const handleError = (error: unknown) => {
     // This is a string error message
     console.error(error);
     throw new Error(`Error: ${error}`);
+  } else if (typeof error === "undefined") {
+    // Handle undefined errors gracefully
+    console.error("Undefined error");
+    throw new Error("Undefined error");
   } else {
     // This is an unknown type of error
     console.error(error);

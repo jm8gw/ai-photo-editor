@@ -15,10 +15,11 @@ const MobileNav = () => {
     <header className="header">
         <Link href="/" className="flex items-center gap-2 md:py-2">
             <Image
-                src="/assets/images/pixelperfectlogo.png"
+                src="/assets/images/PixelPerfectFinal.png"
                 alt="logo"
-                width={180}
-                height={28}
+                width={239} 
+                height={40}
+                layout="responsive"
             />
         </Link>
 
@@ -39,10 +40,11 @@ const MobileNav = () => {
                     <SheetContent className="sheet-content sm:w-64">
                         <>
                             <Image 
-                                src="/assets/images/pixelperfectlogo.png"
+                                src="/assets/images/PixelPerfectFinal.png"
                                 alt="logo"
-                                width={152}
-                                height={23}
+                                width={239} 
+                                height={40}
+                                layout="responsive"
                             />
                             <ul className='header-nav_elements'>
                                 {/* This map takes in pre-defined routes from contants */}

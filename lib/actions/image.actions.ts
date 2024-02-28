@@ -110,6 +110,7 @@ export async function getImageById(imageId: string) { // This one only needs the
 
 // GET ALL IMAGES
 // Used to get all the images so we can display them in our collections component on the home page
+// Note: this collects all the images from all the users, and not just the images from the user that's currently logged in. See getUserImages for that.
 // This particular function is a bit more complex, as it will also include a search query, and pagination. 
 export async function getAllImages({ limit = 9, page = 1, searchQuery = ''}: {
     limit?: number;
@@ -178,3 +179,35 @@ export async function getAllImages({ limit = 9, page = 1, searchQuery = ''}: {
         handleError(error);
     }
 }
+
+// GET ALL IMAGES FOR (CURRENT) USER
+// Used to get all the images from the user (based on userId param)
+// This is similar to getAllImages, but we can pull directly from the database without the use of Cloudinary.
+export async function getUserImages({ limit = 9, page = 1, userId }: {
+    limit?: number;
+    page: number;
+    userId: string;
+}) {
+    try {
+        await connectToDatabase(); // Connect to the database
+    
+        // Define pagination
+        const skipAmount = (Number(page) - 1) * limit; // Calculate the amount of images we want to skip based off of the page number and the limit of cards per page
+
+        // Fetch back the images
+        const images = await populateUser(Image.find({ author: userId })) // Find the images by author/userId, and populate them so that they also contain the data about the user that created them
+            .sort({ updatedAt: -1 }) // So that the most recent ones are shown first
+            .skip(skipAmount) // For the pagination
+            .limit(limit);
+                
+        // Define the number of total images
+        const totalImages = await Image.find({ author: userId }).countDocuments();
+    
+        return {
+            data: JSON.parse(JSON.stringify(images)), // Return the images
+            totalPages: Math.ceil(totalImages / limit), // Return the total number of pages
+        };
+    } catch (error) {
+        handleError(error);
+    }
+  }

@@ -21,7 +21,15 @@ const Home = async ({ searchParams }: SearchParamProps) => {
       {/* TODO: Change this damn call to action. I don't like the banner background or the font. */}
       <section className='home'>
         <h1 className='home-heading'>
-        Unlock Photo Perfection with PixelPerfect!
+        Unlock Photo Perfection with PixelPerfect  
+        {/*              
+            <Image 
+              src="/assets/images/pixelperfectlogoclean.png" 
+              alt="logo" 
+              width={239} 
+              height={40}
+            />
+            */}
         </h1>
         <ul className='flex-center w-full gap-20'>
           {/* Utilize the navigation setup we have in constants. */}
