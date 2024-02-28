@@ -3,7 +3,7 @@ import { authMiddleware } from "@clerk/nextjs";
 export default authMiddleware({   
   // Routes that can be accessed while signed out
   // publicRoutes: ['/'],
-  publicRoutes: ['/api/webhooks/clerk'], // We are allowing public access to the Clerk webhooks, so Clerk can send us events
+  publicRoutes: ['/', '/api/webhooks/clerk', '/api/webhooks/stripe'], // We are allowing public access to the Clerk and Stripe webhooks, so Clerk and Stripe can send us events. We are also allowing public access to the home page, so that non-authenticated users can still see community-created transformations.
 });
  
 export const config = {
