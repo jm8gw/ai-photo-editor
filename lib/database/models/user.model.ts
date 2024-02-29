@@ -55,7 +55,7 @@ const UserSchema = new Schema({
     creditBalance: {
         type: Number, 
         //required: true // Again, not required. Visters don't need to use the credit system at all
-        default: 10 // Default to 10 credits, as a freebee
+        default: 20 // Default to 20 credits, as a freebee
     },
     /* Don't need to know when the user was created or updated, unlike images
     createdAt: {
