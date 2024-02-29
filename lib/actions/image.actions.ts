@@ -206,6 +206,7 @@ export async function getUserImages({ limit = 9, page = 1, userId }: {
         return {
             data: JSON.parse(JSON.stringify(images)), // Return the images
             totalPages: Math.ceil(totalImages / limit), // Return the total number of pages
+            totalImages, // For the profile page counter
         };
     } catch (error) {
         handleError(error);
