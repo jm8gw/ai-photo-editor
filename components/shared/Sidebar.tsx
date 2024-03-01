@@ -29,7 +29,7 @@ const Sidebar = () => {
                     {/* Code in here will only show if the user is signed in */}
                     <ul className='sidebar-nav_elements'>
                         {/* This map takes in pre-defined routes from contants */}
-                        {navLinks.slice(0, 6).map((link) => {
+                        {navLinks.slice(0, 7).map((link) => {
                             const isActive = link.route === pathname
 
                             return(
@@ -52,7 +52,7 @@ const Sidebar = () => {
 
 
                     <ul className='sidebar-nav_elements'>
-                        {navLinks.slice(6).map((link) => {
+                        {navLinks.slice(7).map((link) => {
                             const isActive = link.route === pathname
 
                             return(

@@ -60,6 +60,10 @@ declare type CreateUserParams = {
   declare type Transformations = {
     restore?: boolean;
     fillBackground?: boolean;
+    replace?: {
+      from: string;
+      to: string;
+    };
     remove?: {
       prompt: string;
       removeShadow?: boolean;
@@ -93,6 +97,7 @@ declare type CreateUserParams = {
   declare type TransformationTypeKey =
     | "restore"
     | "fill"
+    | "replace"
     | "remove"
     | "recolor"
     | "removeBackground";

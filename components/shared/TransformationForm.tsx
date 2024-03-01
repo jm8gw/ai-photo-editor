@@ -55,7 +55,8 @@ export const formSchema = z.object({
   publicId: z.string(),
 
   // These are transformation option specific
-  aspectRatio: z.string().optional(), 
+  aspectRatio: z.string().optional(),
+  replacement: z.string().optional(), 
   color: z.string().optional(), 
   prompt: z.string().optional(),
 })
@@ -280,7 +281,7 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
                 />
             )}
 
-            {/* Only object remove and object recolor options will need a prompt field (so users can say what to remove or recolor) */}
+            {/* Only object remove, generative replace, and object recolor options will need a prompt field (so users can say what to remove, replace, or recolor). There is a cleaner way of writng this but I wanted to have it out explicitly */}
             {((type === 'remove') || (type === 'recolor')) && (
                 <div className="prompt-field">
                     <CustomField 
@@ -326,6 +327,47 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
                         
                         />    
                     )}
+                </div>
+            )}
+            {type === 'replace' && (
+                <div className="prompt-field">
+                    <CustomField 
+                        control={form.control}
+                        name="prompt"
+                        formLabel="Object to Replace"
+                        className="w-full"
+                        render={({ field }) => (
+                            <Input 
+                                value= {field.value}
+                                className="input-field" 
+                                onChange={(e) => onInputChangeHandler(
+                                    'prompt', // Pass string of field we are changing
+                                    e.target.value, // So it knows the data we are trying to type
+                                    'replace', // Are we removing or recoloring?
+                                    field.onChange
+                                )}
+                            />
+                        )}
+                    />
+                  
+                    <CustomField 
+                        control={form.control}
+                        name="replacement"
+                        formLabel="Replacement Object"
+                        className="w-full"
+                        render={({ field }) => (
+                            <Input 
+                                value= {field.value}
+                                className="input-field" 
+                                onChange={(e) => onInputChangeHandler(
+                                    'color', // Pass string of field we are changing
+                                    e.target.value, // So it knows the data we are trying to type
+                                    'replace',
+                                    field.onChange
+                                )}
+                            />    
+                        )}
+                    />    
                 </div>
             )}
   

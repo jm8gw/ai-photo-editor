@@ -1,4 +1,4 @@
-// This page is where users are brought to after they click one of their recent edits on the home page, with the intent on revisiting that particular transformation. It displays the (available) details of the image, including the transformation type, prompt, color, aspect ratio, and the original and transformed images side by side. It also includes a button to update the image and a button to delete the image.
+// Details Page: This page is where users are brought to after they click one of their recent edits on the home page, with the intent on revisiting that particular transformation. It displays the (available) details of the image, including the transformation type, prompt, color, aspect ratio, and the original and transformed images side by side. It also includes a button to update the image and a button to delete the image.
 
 // Because this file uses much of the same techniques, components, and concepts as previous pages, I will not go into much detail about it. It is mostly just a rendering.
 

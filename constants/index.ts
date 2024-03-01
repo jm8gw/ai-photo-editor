@@ -18,6 +18,11 @@ export const navLinks = [
       icon: "/assets/icons/stars.svg",
     },
     {
+      label: "Generative Replace",
+      route: "/transformations/add/replace",
+      icon: "/assets/icons/filter.svg",
+    },
+    {
       label: "Object Remove",
       route: "/transformations/add/remove",
       icon: "/assets/icons/scan.svg",
@@ -25,7 +30,7 @@ export const navLinks = [
     {
       label: "Object Recolor",
       route: "/transformations/add/recolor",
-      icon: "/assets/icons/filter.svg",
+      icon: "/assets/icons/paint.svg",
     },
     {
       label: "Background Remove",
@@ -150,6 +155,15 @@ export const navLinks = [
       subtitle: "Enhance an image's dimensions using AI outpainting",
       config: { fillBackground: true },
       icon: "stars.svg",
+    },
+    replace: {
+      type: "replace",
+      title: "Generative Replace",
+      subtitle: "Replace parts of an image with AI-generated content",
+      config: {
+        replace: { from: "", to: "" },
+      },
+      icon: "filter.svg",
     },
     remove: {
       type: "remove",
