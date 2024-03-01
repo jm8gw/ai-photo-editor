@@ -48,6 +48,7 @@ import { getCldImageUrl } from "next-cloudinary";
 import { addImage, updateImage } from "@/lib/actions/image.actions";
 import { useRouter } from "next/navigation";
 import { InsufficientCreditsModal } from "./InsufficientCreditsModal";
+import { useToast } from "../ui/use-toast";
 
 // Validation, where we define what kind of fields or inputs we want to have in our form
 export const formSchema = z.object({
@@ -84,6 +85,9 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
 
     // Routing functionality from next/navigation
     const router = useRouter();
+
+    // A toast to remind users to save after transforming an image
+    const toast = useToast();
 
     // Need to define default values. In the case of editing, we might have data from before that we should use.
     const initialValues = data && action === 'Update' ? {
@@ -220,6 +224,13 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
         )
 
         setNewTransformation(null); // We are done with the transformation
+
+        toast.toast({
+            title: 'Transforming...',
+            description: `Don't forget to save your work!`,
+            duration: 5000,
+            className: 'success-toast',
+        })
 
         startTransition(async () => {
             await updateCredits(userId, creditFee); // Coming from user actions, as this is a server action done with the database. We need to update the user's credit balance after they have used some of it to transform an image.

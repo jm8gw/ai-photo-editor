@@ -5,7 +5,7 @@ PixelPerfect is a web-based photo editor powered by AI. It allows users to enhan
 ## Features
 
 - AI-powered photo enhancement
-- Advanced image manipulation tools: Generative Full, Image Restor
+- Advanced image manipulation tools: Image Restore, Generative Fill, Generative Replace, Object Remove, Object Recolor, and Background Remove
 - User-friendly interface
 - Real-time preview
 - Cross-platform compatibility
@@ -13,10 +13,13 @@ PixelPerfect is a web-based photo editor powered by AI. It allows users to enhan
 ## Technologies Used
 
 - Next.js: A React framework for building server-side rendered and static websites
-- MongoDB: A NoSQL database that provides a flexible and scalable solution for storing and retrieving user/content/transaction data.
-- Cloudinary API: Powerful tool for managing and manipulating images in the cloud using AI.
-- Clerk API: For authenticating users and securing their profile.
-- Stripe API: For payment processing with regards to image transformation credit plans.
+- TypeScript: JavaScript With Syntax For Types
+- MongoDB: A NoSQL database that provides a flexible and scalable solution for storing and retrieving user/content/transaction data
+- Cloudinary API: Powerful tool for managing and manipulating images in the cloud using AI
+- Clerk API: For authenticating users and securing their profile
+- Stripe API: For payment processing with regards to image transformation credit plans
+- Shadcn: A library for rapid UI development with style props, color modes, themes and variants
+- TailwindCSS: A utility-first CSS framework for rapidly building modern websites straight from HTML
 
 ## Getting Started
 

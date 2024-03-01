@@ -204,6 +204,18 @@ export const navLinks = [
       width: 1000,
       height: 1778,
     },
+    "4:3": {
+      aspectRatio: "4:3",
+      label: "Standard Landscape (4:3)",
+      width: 1334,
+      height: 1000,
+    },
+    "16:9": {
+      aspectRatio: "16:9",
+      label: "Widescreen (16:9)",
+      width: 1778,
+      height: 1000,
+    },
   };
   
   export const defaultValues = {
