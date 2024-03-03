@@ -57,6 +57,7 @@ export const formSchema = z.object({
 
   // These are transformation option specific
   aspectRatio: z.string().optional(),
+  from: z.string().optional(),
   replacement: z.string().optional(), 
   color: z.string().optional(), 
   prompt: z.string().optional(),
@@ -95,6 +96,8 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
         aspectRatio: data?.aspectRatio,
         color: data?.color,
         prompt: data?.prompt,
+        from: data?.from,
+        replacement: data?.replacement,
         publicId: data?.publicId,
     } : defaultValues // If we are not updating, we are creating, so we use the default values (taken from constants file)
 
@@ -111,7 +114,7 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
 
         if(data || image) { // If we have data or a new image, proceed with the action
             // Get back the tranformation url provided by cloudinary
-            const transformationUrl = getCldImageUrl({
+            const transformationURL = getCldImageUrl({
                 width: image?.width,
                 height: image?.height,
                 src: image?.publicId,
@@ -126,10 +129,12 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
                 height: image?.height,
                 config: transformationConfig,
                 secureURL: image?.secureURL, // to where that image is stored
-                transformationURL: transformationUrl, // Change everything to have captital "URL". Too confusing otherwise.
+                transformationURL: transformationURL, // Change everything to have captital "URL". Too confusing otherwise.
                 aspectRatio: values.aspectRatio, // from the form
                 prompt: values.prompt,
                 color: values.color,
+                from: values.from,
+                replacement: values.replacement,
             }
 
             if(action === "Add"){ // We want to add the image for the first time
@@ -194,7 +199,7 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
         return onChangeField(value);
     }
 
-    // Function to handle input changes (color for recoloring, and prompt for removing objects)
+    // Function to handle input changes (like color for recoloring, and prompt for removing objects)
     const onInputChangeHandler = (
         fieldName: string, 
         value: string, 
@@ -203,10 +208,11 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
             // We wait to wait a little bit (1 second) before we submit any entries. The full prompt should be written before we send it to the AI to process, otherwise we are wasting requests and resources by sending in words one letter at a time. We achieve this by using a debounce function.
             debounce(() => {
                 setNewTransformation((prevState: any) => ({
-                    ...prevState, // "Spead" the previous state
+                    ...prevState, // "Spread" the previous state
                     [type]: { // "Tap into" a specific property of the previous state
                         ...prevState?.[type], // Spread all the properties that IT has
-                        [fieldName === 'prompt' ? 'prompt' : 'to' ]: value // Either we are changing the prompt or the color
+                        // fieldName === 'prompt' ? 'prompt' : 'to' ]: value // Either we are changing the prompt or the color
+                        [fieldName === 'prompt' ? 'prompt' : fieldName === 'from' ? 'from' : 'to']: value
                     }    
                 }))
             }, 1000)(); // Must be made a self-involking function to work properly 
@@ -344,7 +350,7 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
                 <div className="prompt-field">
                     <CustomField 
                         control={form.control}
-                        name="prompt"
+                        name="from"
                         formLabel="Object to Replace"
                         className="w-full"
                         render={({ field }) => (
@@ -352,9 +358,9 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
                                 value= {field.value}
                                 className="input-field" 
                                 onChange={(e) => onInputChangeHandler(
-                                    'prompt', // Pass string of field we are changing
+                                    'from', // Pass string of field we are changing
                                     e.target.value, // So it knows the data we are trying to type
-                                    'replace', // Are we removing or recoloring?
+                                    'replace',
                                     field.onChange
                                 )}
                             />
@@ -371,7 +377,7 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
                                 value= {field.value}
                                 className="input-field" 
                                 onChange={(e) => onInputChangeHandler(
-                                    'color', // Pass string of field we are changing
+                                    'replacement', // Pass string of field we are changing
                                     e.target.value, // So it knows the data we are trying to type
                                     'replace',
                                     field.onChange

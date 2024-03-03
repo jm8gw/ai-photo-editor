@@ -28,7 +28,7 @@ const ImageDetails = async ({ params: { id } }: SearchParamProps) => {
   return (
     <>
       <Header title={image.title} />
-
+      {/*console.log(image)*/}
       <section className="mt-5 flex flex-wrap gap-4">
         <div className="p-14-medium md:p-16-medium flex gap-2">
           <p className="text-dark-600">Transformation:</p>
@@ -63,6 +63,25 @@ const ImageDetails = async ({ params: { id } }: SearchParamProps) => {
             <div className="p-14-medium md:p-16-medium flex gap-2">
               <p className="text-dark-600">Aspect Ratio:</p>
               <p className=" capitalize text-purple-400">{image.aspectRatio}</p>
+            </div>
+          </>
+        )}
+
+        {image.config.replace?.from && (
+          <>
+            <p className="hidden text-dark-400/50 md:block">&#x25CF;</p>
+            <div className="p-14-medium md:p-16-medium flex gap-2">
+              <p className="text-dark-600">Object Replaced:</p>
+              <p className=" capitalize text-purple-400">{image.config.replace.from}</p>
+            </div>
+          </>
+        )}
+        {image.config.replace?.to && (
+          <>
+            <p className="hidden text-dark-400/50 md:block">&#x25CF;</p>
+            <div className="p-14-medium md:p-16-medium flex gap-2">
+              <p className="text-dark-600">Replacement:</p>
+              <p className=" capitalize text-purple-400">{image.config.replace.to}</p>
             </div>
           </>
         )}

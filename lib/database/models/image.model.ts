@@ -11,14 +11,17 @@ export interface IImage extends Document {
     width?: number;
     height?: number;
     config?: object;
-    transformationUrl?: string; // This is a URL, but we are storing it as a string
+    transformationURL?: string; // This is a URL, but we are storing it as a string
     aspectRatio?: string;
     color?: string;
     prompt?: string;
+    from?: string;
+    replacement?: string;
     author?: {
         _id: string;
         firstName: string;
         lastName: string;
+        username: string;
     }
     createdAt?: Date;
     updatedAt?: Date;
@@ -33,10 +36,12 @@ const ImageSchema = new Schema({
     width: {type: Number},
     height: {type: Number},
     config: {type: Object},
-    transformationUrl: {type: String}, // This is a URL, but we are storing it as a string because "URL" is not a valid type in mongoose
+    transformationURL: {type: String}, // This is a URL, but we are storing it as a string because "URL" is not a valid type in mongoose
     aspectRatio: {type: String},
     color: {type: String},
     prompt: {type: String},
+    from: {type: String},
+    replacement: {type: String},
     author: {type: Schema.Types.ObjectId, ref: "User"},
     createdAt: {type: Date, default: Date.now},
     updatedAt: {type: Date, default: Date.now},

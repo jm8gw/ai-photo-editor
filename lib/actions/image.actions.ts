@@ -14,7 +14,7 @@ import { v2 as cloudinary } from "cloudinary"; // This is the official Cloudinar
 const populateUser = (query: any) => query.populate({
     path: "author",
     model: User,
-    select: "_id firstName lastName clerkId",
+    select: "_id firstName lastName clerkId username",
 }); 
 
 

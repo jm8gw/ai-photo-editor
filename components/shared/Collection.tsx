@@ -8,7 +8,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { CldImage } from "next-cloudinary";
 
 import {
@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/pagination";
 import { transformationTypes } from "@/constants";
 import { IImage } from "@/lib/database/models/image.model";
-import { formUrlQuery } from "@/lib/utils";
+import { formUrlQuery, getPageName } from "@/lib/utils";
 
 import { Button } from "../ui/button";
 
@@ -101,6 +101,8 @@ export const Collection = ({
 };
 
 const Card = ({ image }: { image: IImage }) => {
+  const pathname = usePathname()
+
   return (
     <li>
       <Link href={`/transformations/${image._id}`} className="collection-card">
@@ -129,6 +131,13 @@ const Card = ({ image }: { image: IImage }) => {
             height={24}
           />
         </div>
+        {pathname === '/' && (
+          <div>
+            <p className="text-xs text-gray-400 -mt-4 -mb-2">
+              Created by {image.author?.username}
+            </p>
+           </div>
+        )}
       </Link>
     </li>
   );

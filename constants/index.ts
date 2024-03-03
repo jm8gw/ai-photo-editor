@@ -181,7 +181,7 @@ export const navLinks = [
       config: {
         recolor: { prompt: "", to: "", multiple: true },
       },
-      icon: "filter.svg",
+      icon: "paint.svg",
     },
   };
   
@@ -223,6 +223,8 @@ export const navLinks = [
     aspectRatio: "",
     color: "",
     prompt: "",
+    from: "",
+    replacement: "",
     publicId: "",
   };
   

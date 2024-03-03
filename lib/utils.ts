@@ -71,6 +71,12 @@ export const formUrlQuery = ({
   })}`;
 };
 
+// GET URL QUERY
+export const getPageName = () => {
+  return `${window.location.pathname}`;
+}
+
+
 // REMOVE KEY FROM QUERY
 export function removeKeysFromQuery({
   searchParams,

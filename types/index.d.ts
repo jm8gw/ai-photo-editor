@@ -33,6 +33,8 @@ declare type CreateUserParams = {
       aspectRatio: string | undefined;
       prompt: string | undefined;
       color: string | undefined;
+      from: string | undefined;
+      replacement: string | undefined;
     };
     userId: string;
     path: string;
@@ -52,6 +54,8 @@ declare type CreateUserParams = {
       aspectRatio: string | undefined;
       prompt: string | undefined;
       color: string | undefined;
+      from: string | undefined;
+      replacement: string | undefined;
     };
     userId: string;
     path: string;
