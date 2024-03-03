@@ -8,6 +8,7 @@ export interface IImage extends Document {
     transformationType: string;
     publicId: string;
     secureURL: string; // This is a URL, but we are storing it as a string
+    private: boolean;
     width?: number;
     height?: number;
     config?: object;
@@ -32,6 +33,7 @@ const ImageSchema = new Schema({
     transformationType: {type: String, required: true},
     publicId: {type: String, required: true},
     secureURL: {type: String, required: true}, // This is a URL, but we are storing it as a string because "URL" is not a valid type in mongoose
+    private: {type: Boolean, default: false, required: true},
     // Other Properties of the Image
     width: {type: Number},
     height: {type: Number},

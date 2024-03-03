@@ -83,7 +83,7 @@ export async function updateImage({ image, userId, path }: UpdateImageParams) {
 
         revalidatePath(path); // Comes from next/cache.ts. This allows us to actually show the new image on the site after it's been created, instead of just keeping what was cached before.
 
-        return JSON.parse(JSON.stringify(updateImage)); // Return the updated image
+        return JSON.parse(JSON.stringify(updatedImage)); // Return the updated image
     } catch (error) {
         handleError(error);
     }

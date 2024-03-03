@@ -15,13 +15,21 @@ import Link from "next/link";
 import Header from "@/components/shared/Header";
 import TransformedImage from "@/components/shared/TransformedImage";
 import { Button } from "@/components/ui/button";
-import { getImageById } from "@/lib/actions/image.actions";
+import { getImageById, updateImage } from "@/lib/actions/image.actions";
 import { getImageSize } from "@/lib/utils";
 import { DeleteConfirmation } from "@/components/shared/DeleteConfirmation";
+import { getUserById } from "@/lib/actions/user.actions";
+import { redirect, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import PrivacyToggle from "@/components/shared/PrivacyToggle";
 // import { DeleteConfirmation } from "@/components/shared/DeleteConfirmation";
 
 const ImageDetails = async ({ params: { id } }: SearchParamProps) => {
   const { userId } = auth();
+
+  if (!userId) redirect("/sign-in"); // Redirect if not authenticated
+
+  const user = await getUserById(userId as string);
 
   const image = await getImageById(id); // From our image server actions file
 
@@ -29,6 +37,7 @@ const ImageDetails = async ({ params: { id } }: SearchParamProps) => {
     <>
       <Header title={image.title} />
       {/*console.log(image)*/}
+      <div className="justify-between flex items-center">
       <section className="mt-5 flex flex-wrap gap-4">
         <div className="p-14-medium md:p-16-medium flex gap-2">
           <p className="text-dark-600">Transformation:</p>
@@ -76,6 +85,7 @@ const ImageDetails = async ({ params: { id } }: SearchParamProps) => {
             </div>
           </>
         )}
+        
         {image.config.replace?.to && (
           <>
             <p className="hidden text-dark-400/50 md:block">&#x25CF;</p>
@@ -86,6 +96,14 @@ const ImageDetails = async ({ params: { id } }: SearchParamProps) => {
           </>
         )}
       </section>
+      
+      {/* PRIVACY BUTTON */}
+      <PrivacyToggle 
+        image={image} 
+        userId={userId as string} 
+      />
+
+      </div>
 
       <section className="mt-10 border-t border-dark-400/15">
         <div className="transformation-grid">
