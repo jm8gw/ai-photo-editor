@@ -6,9 +6,11 @@ PixelPerfect is a web-based photo editor powered by AI. It allows users to enhan
 
 - AI-powered photo enhancement
 - Advanced image manipulation tools: Image Restore, Generative Fill, Generative Replace, Object Remove, Object Recolor, and Background Remove
+- User authentication with Clerk
 - User-friendly interface
 - Real-time preview
 - Cross-platform compatibility
+- Quick and simple in-app purchases
 
 ## Technologies Used
 
