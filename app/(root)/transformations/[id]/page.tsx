@@ -36,7 +36,7 @@ const ImageDetails = async ({ params: { id } }: SearchParamProps) => {
   return (
     <>
       <Header title={image.title} />
-      {/*console.log(image)*/}
+      {console.log("great googly", image)}
       <div className="justify-between flex items-center">
       <section className="mt-5 flex flex-wrap gap-4">
         <div className="p-14-medium md:p-16-medium flex gap-2">
@@ -100,7 +100,7 @@ const ImageDetails = async ({ params: { id } }: SearchParamProps) => {
       {/* PRIVACY BUTTON */}
       <PrivacyToggle 
         image={image} 
-        userId={userId as string} 
+        userId={user._id} // This is the database user id, NOT the Clerk id
       />
 
       </div>

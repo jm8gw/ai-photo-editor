@@ -67,6 +67,7 @@ export async function updateImage({ image, userId, path }: UpdateImageParams) {
 
         // Find the image we want to update
         const imageToUpdate = await Image.findById(image._id);
+        console.log("yikes", imageToUpdate)
 
         // Check if it exists, and if the user has permission to update it
         if (!imageToUpdate) { 
@@ -74,12 +75,13 @@ export async function updateImage({ image, userId, path }: UpdateImageParams) {
         } else if (imageToUpdate.author.toHexString() !== userId) {
             throw new Error("User not authorized to update image"); // If the user doesn't have permission to update the image (i.e. isn't the image author), throw an error
         }
-
+        console.log("the image we just passed in", image)
         const updatedImage = await Image.findByIdAndUpdate(
             imageToUpdate._id, // Find the image by its _id
             image, // Update the image with the new image object we passed in
             { new: true } // So we get a new instance of that document
         )
+        console.log("update", updatedImage)
 
         revalidatePath(path); // Comes from next/cache.ts. This allows us to actually show the new image on the site after it's been created, instead of just keeping what was cached before.
 

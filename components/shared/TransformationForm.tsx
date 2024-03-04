@@ -54,6 +54,7 @@ import { useToast } from "../ui/use-toast";
 export const formSchema = z.object({
   title: z.string(),
   publicId: z.string(),
+  //private: z.boolean().optional(),
 
   // These are transformation option specific
   aspectRatio: z.string().optional(),
@@ -93,6 +94,7 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
     // Need to define default values. In the case of editing, we might have data from before that we should use.
     const initialValues = data && action === 'Update' ? {
         title: data?.title,
+        private: data?.private,
         aspectRatio: data?.aspectRatio,
         color: data?.color,
         prompt: data?.prompt,
@@ -125,6 +127,7 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
                 title: values.title, // directly from the form
                 publicId: image?.publicId, // from the image state
                 transformationType: type, // recolor, gen fill, etc.
+                private: image?.private,
                 width: image?.width,
                 height: image?.height,
                 config: transformationConfig,

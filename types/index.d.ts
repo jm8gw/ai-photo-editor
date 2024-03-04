@@ -25,6 +25,7 @@ declare type CreateUserParams = {
       title: string;
       publicId: string;
       transformationType: string;
+      private: boolean;
       width: number;
       height: number;
       config: any;
@@ -46,6 +47,7 @@ declare type CreateUserParams = {
       title: string;
       publicId: string;
       transformationType: string;
+      private: boolean;
       width: number;
       height: number;
       config: any;

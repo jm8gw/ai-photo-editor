@@ -220,6 +220,7 @@ export const navLinks = [
   
   export const defaultValues = {
     title: "",
+    private: "",
     aspectRatio: "",
     color: "",
     prompt: "",
