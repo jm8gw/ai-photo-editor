@@ -39,8 +39,8 @@ const PrivacyToggle = ({ image, userId }: {image: any, userId: string}) => {
 
 
         try {
-            console.log("button pressed")
-            console.log(image.private)
+            //console.log("button pressed")
+            //console.log(image.private)
             
             const updatedImage = await updateImage({ // from image.actions.ts, accepts image, userId, and path
                 image: {   
@@ -50,14 +50,14 @@ const PrivacyToggle = ({ image, userId }: {image: any, userId: string}) => {
                 userId,
                 path: `/transformations/${image._id}` // We want to redirect to the specific image we are updating
             })
-            console.log(updatedImage.private)
-            console.log(image)
-            console.log(updatedImage)
+            //console.log(updatedImage.private)
+            //console.log(image)
+            //console.log(updatedImage)
             if(updatedImage) {
                 // Push to that existing tranformation
                 router.push(`/transformations/${updatedImage._id}`)
             }
-            console.log("did what I can")
+            //console.log("did what I can")
             
         } catch (error) {
             console.log(error)

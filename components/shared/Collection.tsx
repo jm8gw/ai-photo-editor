@@ -27,11 +27,13 @@ import { Search } from "./Search";
 
 export const Collection = ({
   hasSearch = false,
+  home,
   images,
   totalPages = 1,
   page,
 }: {
   images: IImage[];
+  home?: boolean;
   totalPages?: number;
   page: number;
   hasSearch?: boolean;
@@ -62,7 +64,9 @@ export const Collection = ({
       {images.length > 0 ? (
         <ul className="collection-list">
           {images.map((image) => (
-            <Card image={image} key={image._id} />
+            //(home ? image.private === false : true) && (
+              <Card image={image} key={image._id} />
+            //)
           ))}
         </ul>
       ) : (
@@ -117,9 +121,19 @@ const Card = ({ image }: { image: IImage }) => {
           sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 33vw"
         />
         <div className="flex-between">
+          <div className="flex mr-2">
           <p className="p-20-semibold mr-3 line-clamp-1 text-dark-600">
             {image.title}
           </p>
+          {image.private && (
+            <Image
+              src='/assets/icons/lock.svg'
+              alt="Private"
+              width={16}
+              height={16}
+            />
+          )}
+          </div>
           <Image
             src={`/assets/icons/${
               transformationTypes[

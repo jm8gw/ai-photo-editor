@@ -35,8 +35,18 @@ const ImageDetails = async ({ params: { id } }: SearchParamProps) => {
 
   return (
     <>
-      <Header title={image.title} />
-      {console.log("great googly", image)}
+      <div className="flex items-center gap-4">
+        <h2 className='h2-bold text-dark-600'>{image.title}</h2>
+        {image.private && (
+            <Image
+              src='/assets/icons/lock.svg'
+              alt="Private"
+              width={16}
+              height={16}
+            />
+        )}
+      </div>
+      {/*console.log("great googly", image)*/}
       <div className="justify-between flex items-center">
       <section className="mt-5 flex flex-wrap gap-4">
         <div className="p-14-medium md:p-16-medium flex gap-2">

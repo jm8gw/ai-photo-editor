@@ -43,7 +43,7 @@ const Profile = async ({ searchParams }: SearchParamProps) => {
         </div>
 
         <div className="profile-image-manipulation">
-          <p className="p-14-medium md:p-16-medium">Image Transformations Completed:</p>
+          <p className="p-14-medium md:p-16-medium">Image Transformations:</p>
           <div className="mt-4 flex items-center gap-4">
             <Image
               src="/logoiconcamera.png"
@@ -59,6 +59,8 @@ const Profile = async ({ searchParams }: SearchParamProps) => {
 
       <section className="mt-8 md:mt-14">
         <Collection // Similar to the home page, but this time the images are taken from the user's collection.
+          // hasSearch={true} // We don't need it in profile
+          home={false}
           images={images?.data}
           totalPages={images?.totalPages}
           page={page}

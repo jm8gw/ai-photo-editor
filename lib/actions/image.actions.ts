@@ -67,7 +67,7 @@ export async function updateImage({ image, userId, path }: UpdateImageParams) {
 
         // Find the image we want to update
         const imageToUpdate = await Image.findById(image._id);
-        console.log("yikes", imageToUpdate)
+        //console.log("yikes", imageToUpdate)
 
         // Check if it exists, and if the user has permission to update it
         if (!imageToUpdate) { 
@@ -75,13 +75,13 @@ export async function updateImage({ image, userId, path }: UpdateImageParams) {
         } else if (imageToUpdate.author.toHexString() !== userId) {
             throw new Error("User not authorized to update image"); // If the user doesn't have permission to update the image (i.e. isn't the image author), throw an error
         }
-        console.log("the image we just passed in", image)
+        //console.log("the image we just passed in", image)
         const updatedImage = await Image.findByIdAndUpdate(
             imageToUpdate._id, // Find the image by its _id
             image, // Update the image with the new image object we passed in
             { new: true } // So we get a new instance of that document
         )
-        console.log("update", updatedImage)
+        //console.log("update", updatedImage)
 
         revalidatePath(path); // Comes from next/cache.ts. This allows us to actually show the new image on the site after it's been created, instead of just keeping what was cached before.
 
@@ -148,13 +148,14 @@ export async function getAllImages({ limit = 9, page = 1, searchQuery = ''}: {
         // Need to get the resource ids, so we can also use get them from our database
         const resourceIds = resources.map((resource: any) => resource.public_id);
 
-        // Form a new query to get all the images from our own database
-        let query = {};
+        // Form a new query to get the images from our own database (only the ones that are PUBLIC, not private ones)
+        let query: { [key: string]: any } = {
+            private: { $ne: true } // Add this line to exclude private images
+        };
         
         if(searchQuery) { // Coming from the front end
-            query = { // Modify the query to include only the ones we got back from Cloudinary 
-                publicId: { $in: resourceIds }, // Go over the publicIds, and include all the resourceIds
-            }
+            // Modify the query to include only the ones we got back from Cloudinary
+            query.publicId = { $in: resourceIds }; // Go over the publicIds, and include all the resourceIds
         }
 
         // Define pagination

@@ -12,7 +12,7 @@ const Home = async ({ searchParams }: SearchParamProps) => {
   const page = Number(searchParams?.page) || 1; // Record the current page number based off of the search parameters found in the URL
   const searchQuery = (searchParams?.query as string) || ''; // Do the same for the search query found in the URL
 
-  // Next, fetch all the images we have created so far, so that we can pass them into our Collection component.
+  // Next, fetch all the (PUBLIC) images we have created so far, so that we can pass them into our Collection component.
   // To do this, we will implement a new server action like getImageById in image.actions.ts, but this time it gets all the images.
   const images = await getAllImages({ page, searchQuery }); 
 
@@ -56,6 +56,7 @@ const Home = async ({ searchParams }: SearchParamProps) => {
       <section className="sm:mt-12">
         <Collection 
           hasSearch={true} // In some other cases we won't have search
+          home={true} // Signal to the Collection component that it's being used on the home page, so only public images should be shown.
           images={images?.data}
           totalPages={images?.totalPages}
           page={page}
